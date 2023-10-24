@@ -14,7 +14,7 @@ A simple Augmented Reality Multiplayer game for teams up to 3vs3.
 
 | Software / Package                | Description / Link                                                                                  |
 | --------------------------        | ------------------------------------------------------------------------------------- |
-| Unity3D 2021.3.31 (LTS)           | https://unity3d.com/get-unity/download/archive                                        |
+| Unity3D 2022.3.11 (LTS)           | https://unity3d.com/get-unity/download/archive                                        |
 | Blender 3.6.5 (LTS)                    | https://www.blender.org/download/                                                     |
 | AR Foundation    | https://unity.com/de/unity/features/arfoundation                                       |
 | Wwise    | https://www.audiokinetic.com/en/products/wwise                                                              |
