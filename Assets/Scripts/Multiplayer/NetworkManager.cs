@@ -2,22 +2,25 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-public class NetworkManager : MonoBehaviourPunCallbacks
+namespace Multiplayer
 {
-    void Start()
+    public class NetworkManager : MonoBehaviourPunCallbacks
     {
-        PhotonNetwork.ConnectUsingSettings(); // Verbindet mit Photon Server
-    }
+        void Start()
+        {
+            PhotonNetwork.ConnectUsingSettings(); // Verbindet mit Photon Server
+        }
 
-    public override void OnConnectedToMaster()
-    {
-        PhotonNetwork.JoinOrCreateRoom("RoomName", new RoomOptions { MaxPlayers = 4 }, null);
-        // Versucht, einem Raum beizutreten oder einen zu erstellen
-    }
+        public override void OnConnectedToMaster()
+        {
+            PhotonNetwork.JoinOrCreateRoom("RoomName", new RoomOptions { MaxPlayers = 4 }, null);
+            // Versucht, einem Raum beizutreten oder einen zu erstellen
+        }
 
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("Beigetreten oder Raum erstellt");
-        // Hier könnte Code zum Initialisieren des Spiels stehen
+        public override void OnJoinedRoom()
+        {
+            Debug.Log("Beigetreten oder Raum erstellt");
+            // Hier könnte Code zum Initialisieren des Spiels stehen
+        }
     }
 }

@@ -1,15 +1,18 @@
 using Photon.Pun;
 using UnityEngine;
 
-public class Matchmaking : MonoBehaviourPunCallbacks
+namespace Multiplayer
 {
-    public override void OnJoinedRoom()
+    public class Matchmaking : MonoBehaviourPunCallbacks
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        public override void OnJoinedRoom()
         {
-            // Starten Sie das Spiel, wenn 2 Spieler im Raum sind
-            Debug.Log("2 Spieler im Raum, starte Spiel");
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            {
+                // Starten Sie das Spiel, wenn 2 Spieler im Raum sind
+                Debug.Log("2 Spieler im Raum, starte Spiel");
+            }
         }
-    }
 
+    }
 }
