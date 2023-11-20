@@ -1,3 +1,6 @@
+using Photon.Pun;
+using UnityEngine;
+
 public class CarController : MonoBehaviour
 {
     void Update()
