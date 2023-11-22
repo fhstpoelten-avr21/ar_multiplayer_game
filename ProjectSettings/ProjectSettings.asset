@@ -158,7 +158,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.fhstp.ARMultiplayerGame
-    Standalone: com.DefaultCompany.com.unity.template.ar
+    Standalone: com.fhstp.AR-Multiplayer-Game
     iPhone: com.fhstp.AR-Multiplayer-Game
   buildNumber:
     Standalone: 0
