@@ -103,9 +103,9 @@ public class PlacementIndicator : MonoBehaviour
         for(var i = 1; i <= 2; i++)
         {
             // for each team, position the cars
-            for(var j = 1; j <= teams[i].Length; j++)
+            for(var j = 1; j <= teams[i-1].Length; j++)
             {
-                GameObject carInstance = Instantiate(teams[i][j-1], new Vector3(0, 0), new Quaternion(0, 0, 0, 0));
+                GameObject carInstance = Instantiate(teams[i-1][j-1], new Vector3(0, 0), new Quaternion(0, 0, 0, 0));
                 carInstance.transform.SetParent(fieldInstance.transform);
                 carInstance.transform.localScale *= carsScale;
 
@@ -115,7 +115,7 @@ public class PlacementIndicator : MonoBehaviour
                 // position the cars one-fifth of the available team-space with an offset
                 carInstance.transform.localPosition = new Vector3(x, 0, z*positionMultiplicator);
                 carInstance.name = "car" + j + "Team" + i;
-                carInstances[i].Append(carInstance);
+                carInstances[i-1].Append(carInstance);
             }
 
             positionMultiplicator *= -1;
