@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -39,6 +41,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         UpdatePlayerList();
+        // Hier könnten Sie die Szene wechseln oder die Lobby-UI aktualisieren
+        Debug.Log("Raum beigetreten: " + PhotonNetwork.CurrentRoom.Name);
     }
 
     void UpdatePlayerList()
@@ -84,13 +88,5 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         GameObject listItem = Instantiate(roomListItemPrefab, roomListContent.transform);
         listItem.GetComponentInChildren<Text>().text = room.Name;
     }
-
-
-    public override void OnJoinedRoom()
-    {
-        // Hier könnten Sie die Szene wechseln oder die Lobby-UI aktualisieren
-        Debug.Log("Raum beigetreten: " + PhotonNetwork.CurrentRoom.Name);
-    }
-
     // Weitere Callbacks für Raumlisten-Updates, Fehlerbehandlung usw.
 }
