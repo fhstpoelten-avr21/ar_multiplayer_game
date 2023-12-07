@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.XR.CoreUtils;
@@ -16,6 +17,8 @@ public class PlacementIndicator : MonoBehaviour
     public GameObject[] team1Cars;
     public GameObject[] team2Cars;
     public GameObject field;
+    public GameObject ball;
+    private GameObject ballInstance;
 
     // teams config
     private GameObject[] carsPlayer1Instances = { };
@@ -41,6 +44,7 @@ public class PlacementIndicator : MonoBehaviour
         xrOrigin = FindObjectOfType<XROrigin>();
 
         instantiateField();
+        instantiateBall();
         instantiateTeams();
     }
 
@@ -62,7 +66,6 @@ public class PlacementIndicator : MonoBehaviour
                 {
                     setField();
                 }
-
             }
             else
             {
@@ -73,13 +76,13 @@ public class PlacementIndicator : MonoBehaviour
 
     private void OnValidate()
     {
-        if(_fieldScale != fieldScale)
+        if (_fieldScale != fieldScale)
         {
             _fieldScale = fieldScale;
             updateFieldSize();
         }
 
-        if(_carsScale != carsScale)
+        if (_carsScale != carsScale)
         {
             _carsScale = carsScale;
         }
@@ -89,37 +92,94 @@ public class PlacementIndicator : MonoBehaviour
     private void instantiateTeams()
     {
         var fieldCollider = fieldInstance.GetComponent<MeshRenderer>();
-        Vector3 fieldSize = fieldCollider.bounds.size;
-        float fieldLength = Mathf.Max(fieldSize.x, fieldSize.z);
-        float fieldWidth = Mathf.Min(fieldSize.x, fieldSize.z);
-        float widthOffset = (fieldWidth / 5) /2;
-        float lengthOffset = (fieldLength / 5) /2;
 
         int positionMultiplicator = 1;
         GameObject[][] teams = { team1Cars, team2Cars };
         GameObject[][] carInstances = { carsPlayer1Instances, carsPlayer2Instances };
 
         // loop through two teams
-        for(var i = 1; i <= 2; i++)
+        for (int i = 0; i < 2; i++)
         {
-            // for each team, position the cars
-            for(var j = 1; j <= teams[i-1].Length; j++)
+            int numberOfLanes = Convert.ToInt32(Math.Ceiling((double)teams[i].Length / 3));
+            int numberOfPlayers = teams[i].Length;
+            int currentPlayerIndex = 0;
+            Vector3[][] slotGrid = calculateSlots(numberOfLanes, positionMultiplicator, fieldCollider, fieldInstance);
+            carInstances[i] = new GameObject[numberOfPlayers];
+
+            // instantiate Players
+            for (int j = 0; j < numberOfPlayers; j++)
             {
-                GameObject carInstance = Instantiate(teams[i-1][j-1], new Vector3(0, 0), new Quaternion(0, 0, 0, 0));
-                carInstance.transform.SetParent(fieldInstance.transform);
-                carInstance.transform.localScale *= carsScale;
+                carInstances[i][j] = Instantiate(teams[i][j], new Vector3(0, 0), new Quaternion(0, 0, 0, 0));
+                carInstances[i][j].transform.SetParent(fieldInstance.transform);
+                carInstances[i][j].transform.localScale *= carsScale;
+                carInstances[i][j].transform.LookAt(ballInstance.transform.position);
+                carInstances[i][j].name = "car" + j + 1 + "Team" + i + 1;
+            }
 
-                float x = (fieldWidth / 5 * j) + ((fieldWidth / 5) / 2) + fieldWidth;
-                float z = ((fieldLength / 5) + lengthOffset) * j;
-
-                // position the cars one-fifth of the available team-space with an offset
-                carInstance.transform.localPosition = new Vector3(x, 0, z*positionMultiplicator);
-                carInstance.name = "car" + j + "Team" + i;
-                carInstances[i-1].Append(carInstance);
+            // for each lane
+            for (int j = 0; j < numberOfLanes; j++)
+            {
+                if (numberOfPlayers == 1)
+                {
+                    carInstances[i][currentPlayerIndex].transform.localPosition = slotGrid[j][1];
+                    currentPlayerIndex++;
+                }
+                else if (numberOfPlayers == 2)
+                {
+                    carInstances[i][currentPlayerIndex].transform.localPosition = slotGrid[j][0];
+                    carInstances[i][currentPlayerIndex + 1].transform.localPosition = slotGrid[j][2];
+                    currentPlayerIndex += 2;
+                }
+                else
+                {
+                    carInstances[i][currentPlayerIndex].transform.localPosition = slotGrid[j][0];
+                    carInstances[i][currentPlayerIndex + 1].transform.localPosition = slotGrid[j][1];
+                    carInstances[i][currentPlayerIndex + 2].transform.localPosition = slotGrid[j][2];
+                    currentPlayerIndex += 3;
+                    numberOfPlayers -= 3;
+                }
             }
 
             positionMultiplicator *= -1;
         }
+    }
+
+    void instantiateBall()
+    {
+        ballInstance = Instantiate(ball, new Vector3(0, ball.transform.right.x/2, 0), new Quaternion(0, 0, 0, 0));
+        ballInstance.transform.SetParent(fieldInstance.transform);
+    }
+
+    private Vector3[][] calculateSlots(int numberOfLanes, int positionMultiplicator, MeshRenderer fieldMeshRenderer, GameObject fieldInstance)
+    {
+        Vector3 calculatedBounds = calculateBounds(fieldInstance.transform.localScale, fieldMeshRenderer.bounds.size);
+        float fieldWidth = calculatedBounds.x;
+        float fieldLength = calculatedBounds.z/2;
+        Vector3[][] slotGrid = new Vector3[numberOfLanes][];
+
+        for (int i = 0; i < numberOfLanes; i++)
+        {
+            slotGrid[i] = new Vector3[3];
+            float lengthPos = fieldLength - (fieldLength / 4f) + ((((fieldLength / 4f) * 2f) / numberOfLanes) * -(i+i*0.5f));
+            
+            for (int j = 0; j < 3; j++)
+            {
+                Vector3 pos = new Vector3(0f, 0f, lengthPos * positionMultiplicator);
+                slotGrid[i][j] = pos;
+            }
+
+            slotGrid[i][0].x = fieldWidth / 4f;
+            slotGrid[i][2].x = -(fieldWidth / 4f);
+        }
+
+        return slotGrid;
+    }
+
+    Vector3 calculateBounds(Vector3 scale, Vector3 size)
+    {
+        // Element-wise division
+        Vector3 result = new Vector3(size.x / scale.x, size.y / scale.y, size.z / scale.z);
+        return result;
     }
 
     private void updateFieldSize()
@@ -142,7 +202,7 @@ public class PlacementIndicator : MonoBehaviour
 
     private void setHitPosition(ARRaycastHit hit)
     {
-        fieldInstance.transform.position = hit.pose.position + new Vector3(0,.1f,0);
+        fieldInstance.transform.position = hit.pose.position + new Vector3(0, .1f, 0);
         fieldInstance.transform.rotation = hit.pose.rotation;
     }
 
