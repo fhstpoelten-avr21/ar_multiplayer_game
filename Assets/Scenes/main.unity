@@ -639,8 +639,10 @@ MonoBehaviour:
   - {fileID: 3207874071675201372, guid: c8b37214d8922d8479304e56a85a566f, type: 3}
   - {fileID: 3151759423152017479, guid: 57fd4cd640b51d345a069ad0daa8b680, type: 3}
   field: {fileID: 2870526664048177557, guid: e103e403908bebd45aa9c2c46f840ac7, type: 3}
-  fieldScale: 1
-  carsScale: 0.08
+  fieldScale: 0.1
+  carsScale: 0.005
+  ball: {fileID: 8927331957935221674, guid: 516e49366a3c1b84e985cc6ee41c1a82, type: 3}
+  ballScale: 1
 --- !u!1 &2132667670
 GameObject:
   m_ObjectHideFlags: 0

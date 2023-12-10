@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Unity.XR.CoreUtils;
 using UnityEngine;
@@ -13,35 +14,55 @@ public class PlacementIndicator : MonoBehaviour
     private ARPlaneManager planeManager;
     private XROrigin xrOrigin;
 
+    [Header("Teams config")]
+    [Space(1)]
     // cars and field objects
     public GameObject[] team1Cars;
     public GameObject[] team2Cars;
-    public GameObject field;
-    public GameObject ball;
-    private GameObject ballInstance;
 
     // teams config
     private GameObject[] carsPlayer1Instances = { };
     private GameObject[] carsPlayer2Instances = { };
+    private GameObject gameFieldContainer;
 
     // field config
     private bool fieldIsSet;
     private Vector3 originalFieldScale;
     private GameObject fieldInstance;
+    private MeshRenderer fieldCollider;
 
-    public float fieldScale = 1.0f;
-    private float _fieldScale = 1.0f;
+    [Header("Field config")]
+    [Space(1)]
+    public GameObject field;
+    public float fieldScale = 0.1f;
+    private float _fieldScale = 0.1f;
 
-    //public float fieldScale = 1f;
-    public float carsScale = .08f;
-    private float _carsScale = .08f;
+    [Header("Car config")]
+    [Tooltip("This controls the scale of the cars relative to the size of the field (e.g. 0.1 = 10% of fieldsize).")]
+    [Space(1)]
+    public float carsScale = 0.005f;
+    private float _carsScale = 0.005f;
+
+    [Header("Ball config")]
+    [Space(1)]
+    public GameObject ball;
+    private GameObject ballInstance;
+    private Ball ballScript;
+    public float ballScale = 1f;
+    private float _ballScale = 1f;
 
     void Start()
     {
-        // get the components
         rayManager = FindObjectOfType<ARRaycastManager>();
         planeManager = FindObjectOfType<ARPlaneManager>();
         xrOrigin = FindObjectOfType<XROrigin>();
+
+        gameFieldContainer = new GameObject("gameFieldContainer");
+        gameFieldContainer.transform.position = Vector3.zero;
+        gameFieldContainer.transform.rotation = new Quaternion(0, 0, 0, 0);
+        gameFieldContainer.transform.localScale = Vector3.one;
+
+        ballScript = ball.GetComponent<Ball>();
 
         instantiateField();
         instantiateBall();
@@ -74,25 +95,37 @@ public class PlacementIndicator : MonoBehaviour
         }
     }
 
+    // update sizes when changed in Unity UI Editor
     private void OnValidate()
     {
-        if (_fieldScale != fieldScale)
+        if (_fieldScale != fieldScale || _carsScale != carsScale || _ballScale != ballScale)
         {
             _fieldScale = fieldScale;
+            _carsScale = carsScale;
+            _ballScale = ballScale;
             updateFieldSize();
         }
+    }
 
-        if (_carsScale != carsScale)
-        {
-            _carsScale = carsScale;
-        }
+    private void instantiateField()
+    {
+        // init field to place
+        fieldIsSet = false;
+        fieldInstance = Instantiate(field, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+
+        // save the original size of the field
+        originalFieldScale = field.transform.localScale;
+
+        fieldInstance.transform.SetParent(gameFieldContainer.transform);
+        fieldInstance.transform.localScale = field.transform.localScale * _fieldScale;
+        fieldInstance.SetActive(false);
+
+        fieldCollider = fieldInstance.GetComponent<MeshRenderer>();
     }
 
     // init method for creating player-cars and setting them on the fieldInstance
     private void instantiateTeams()
     {
-        var fieldCollider = fieldInstance.GetComponent<MeshRenderer>();
-
         int positionMultiplicator = 1;
         GameObject[][] teams = { team1Cars, team2Cars };
         GameObject[][] carInstances = { carsPlayer1Instances, carsPlayer2Instances };
@@ -109,10 +142,11 @@ public class PlacementIndicator : MonoBehaviour
             // instantiate Players
             for (int j = 0; j < numberOfPlayers; j++)
             {
-                carInstances[i][j] = Instantiate(teams[i][j], new Vector3(0, 0), new Quaternion(0, 0, 0, 0));
-                carInstances[i][j].transform.SetParent(fieldInstance.transform);
-                carInstances[i][j].transform.localScale *= carsScale;
-                carInstances[i][j].transform.LookAt(ballInstance.transform.position);
+                carInstances[i][j] = Instantiate(teams[i][j], new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+                carInstances[i][j].transform.SetParent(gameFieldContainer.transform);
+                carInstances[i][j].transform.localScale = Vector3.one * _carsScale;
+
+                // Apply the rotation to the GameObject, preserving the existing X and Z rotations
                 carInstances[i][j].name = "car" + j + 1 + "Team" + i + 1;
             }
 
@@ -140,28 +174,41 @@ public class PlacementIndicator : MonoBehaviour
                 }
             }
 
+            // Make the cars rotate to center of field
+            numberOfPlayers = teams[i].Length;
+            for (int j = 0; j < numberOfPlayers; j++)
+            {
+                carInstances[i][j].transform.LookAt(fieldInstance.transform, Vector3.up);
+            }
+
             positionMultiplicator *= -1;
         }
+
+        carsPlayer1Instances = carInstances[0];
+        carsPlayer2Instances = carInstances[1];
     }
 
     void instantiateBall()
     {
-        ballInstance = Instantiate(ball, new Vector3(0, ball.transform.right.x/2, 0), new Quaternion(0, 0, 0, 0));
-        ballInstance.transform.SetParent(fieldInstance.transform);
+        ballInstance = Instantiate(ball, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+        ballInstance.transform.SetParent(gameFieldContainer.transform);
+        ballInstance.transform.localScale = ball.transform.localScale * _ballScale;
+        MeshRenderer meshR = ballInstance.GetComponent<MeshRenderer>();
+        ballInstance.transform.position = Vector3.zero + Vector3.up * meshR.bounds.size.y/2;
     }
 
     private Vector3[][] calculateSlots(int numberOfLanes, int positionMultiplicator, MeshRenderer fieldMeshRenderer, GameObject fieldInstance)
     {
-        Vector3 calculatedBounds = calculateBounds(fieldInstance.transform.localScale, fieldMeshRenderer.bounds.size);
+        Vector3 calculatedBounds = fieldMeshRenderer.bounds.size;
         float fieldWidth = calculatedBounds.x;
-        float fieldLength = calculatedBounds.z/2;
+        float fieldLength = calculatedBounds.z / 2;
         Vector3[][] slotGrid = new Vector3[numberOfLanes][];
 
         for (int i = 0; i < numberOfLanes; i++)
         {
             slotGrid[i] = new Vector3[3];
-            float lengthPos = fieldLength - (fieldLength / 4f) + ((((fieldLength / 4f) * 2f) / numberOfLanes) * -(i+i*0.5f));
-            
+            float lengthPos = fieldLength - (fieldLength / 4f) + ((((fieldLength / 4f) * 2f) / numberOfLanes) * -(i + i * 0.5f));
+
             for (int j = 0; j < 3; j++)
             {
                 Vector3 pos = new Vector3(0f, 0f, lengthPos * positionMultiplicator);
@@ -184,26 +231,32 @@ public class PlacementIndicator : MonoBehaviour
 
     private void updateFieldSize()
     {
-        fieldInstance.transform.localScale = originalFieldScale * _fieldScale;
-    }
+        if (fieldInstance)
+        {
+            fieldInstance.transform.localScale = field.transform.localScale * _fieldScale;
 
-    private void instantiateField()
-    {
-        // init field to place
-        fieldIsSet = false;
-        fieldInstance = Instantiate(field, new Vector3(0, 0), new Quaternion(0, 0, 0, 0));
+            GameObject[][] teams = { team1Cars, team2Cars };
+            GameObject[][] carsInstances = { carsPlayer1Instances, carsPlayer2Instances };
 
-        // save the original size of the field
-        originalFieldScale = fieldInstance.transform.localScale;
+            for (int i = 0; i < carsInstances.Length; i++)
+            {
+                for (int j = 0; j < carsInstances[i].Length; j++)
+                {
+                    carsInstances[i][j].transform.localScale = teams[i][j].transform.localScale * _carsScale;
+                }
+            }
 
-        fieldInstance.transform.localScale *= _fieldScale;
-        fieldInstance.SetActive(false);
+            if (ballInstance)
+            {
+                ballInstance.transform.localScale = ball.transform.localScale * _ballScale;
+            }
+        }
     }
 
     private void setHitPosition(ARRaycastHit hit)
     {
-        fieldInstance.transform.position = hit.pose.position + new Vector3(0, .1f, 0);
-        fieldInstance.transform.rotation = hit.pose.rotation;
+        gameFieldContainer.transform.position = hit.pose.position + new Vector3(0, .1f, 0);
+        gameFieldContainer.transform.rotation = hit.pose.rotation;
     }
 
     public void setVisibility(bool isVisible)

@@ -15,8 +15,7 @@ public class Ball : MonoBehaviour
         ball = GetComponent<Rigidbody>();
         render = GetComponent<Renderer>();
         render.sharedMaterial = materials[0];
-        
-        ThrowBallUp();
+        Freeze();
     }
     void Update()
     {
@@ -46,12 +45,12 @@ public class Ball : MonoBehaviour
         ball.AddForce(Vector3.up * throwForce, ForceMode.Impulse);
     }
 
-    void Freeze()
+    public void Freeze()
     {
         ball.isKinematic = true;
     }
 
-    void Unfreeze()
+    public void Unfreeze()
     {
         ball.isKinematic = false;
     }
