@@ -61,12 +61,12 @@ public class PlacementIndicator : MonoBehaviour
         gameFieldContainer.transform.position = Vector3.zero;
         gameFieldContainer.transform.rotation = new Quaternion(0, 0, 0, 0);
         gameFieldContainer.transform.localScale = Vector3.one;
-
+        
         ballScript = ball.GetComponent<Ball>();
-
+        
         instantiateField();
         instantiateBall();
-        instantiateTeams();
+        //instantiateTeams();
     }
 
     void Update()

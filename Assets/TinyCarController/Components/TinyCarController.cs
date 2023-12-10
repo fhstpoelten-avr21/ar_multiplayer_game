@@ -103,6 +103,7 @@ namespace DavidJalbert
         virtual protected void Start()
         {
             body = GetComponent<Rigidbody>();
+            Debug.Log(body.transform.position);
             sphereCollider = GetComponent<SphereCollider>();
 
             customPhysicMaterial = new PhysicMaterial();
