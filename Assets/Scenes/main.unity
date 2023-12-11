@@ -616,6 +616,18 @@ MonoBehaviour:
   carController: {fileID: 1643849852}
   carCamera: {fileID: 0}
   mobileInput: {fileID: 1852498830}
+--- !u!134 &323732043
+PhysicMaterial:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DynamicMaterial
+  dynamicFriction: 0
+  staticFriction: 0
+  bounciness: 0
+  frictionCombine: 1
+  bounceCombine: 1
 --- !u!1 &326572821
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,18 +717,6 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
---- !u!134 &348371569
-PhysicMaterial:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: DynamicMaterial
-  dynamicFriction: 0
-  staticFriction: 0
-  bounciness: 0
-  frictionCombine: 1
-  bounceCombine: 1
 --- !u!1 &422218013
 GameObject:
   m_ObjectHideFlags: 0
@@ -5273,7 +5273,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 348371569}
+      objectReference: {fileID: 323732043}
     - target: {fileID: 3781335126789325680, guid: 6456a8adacce52c42a07b8be4ac6184c,
         type: 3}
       propertyPath: m_Materials.Array.size
