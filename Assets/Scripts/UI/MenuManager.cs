@@ -25,5 +25,10 @@ public class MenuManager : MonoBehaviour
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("main_menu");
     }
+    
+    public void BackLobby()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Scene_Lobby");
+    }
 }
 
