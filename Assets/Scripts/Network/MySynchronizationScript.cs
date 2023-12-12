@@ -25,7 +25,7 @@ namespace Network
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody>();
+            //rb = GetComponent<Rigidbody>();
             photonView = GetComponent<PhotonView>();
 
             networkedPosition = new Vector3();

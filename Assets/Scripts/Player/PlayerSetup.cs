@@ -19,7 +19,7 @@ namespace Player
             {
                 //The player is local player. 
                 mobileUI.SetActive(true);
-                carController.GetComponent<TinyCarController>().enabled = true;
+                //carController.GetComponent<TinyCarController>().enabled = true;
                 
                 //TODO - implement better joystick movement using Car Controller
                 //transform.GetComponent<MovementController>().enabled = true;
@@ -29,7 +29,7 @@ namespace Player
             {
                 //The player is remote player - deactivate controls
                 mobileUI.SetActive(false);
-                carController.GetComponent<TinyCarController>().enabled = false;
+                //carController.GetComponent<TinyCarController>().enabled = false;
                 
                 //transform.GetComponent<MovementController>().enabled = false;
                 //transform.GetComponent<MovementController>().joystick.gameObject.SetActive(false);
