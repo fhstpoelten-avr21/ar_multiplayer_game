@@ -2,7 +2,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-namespace Multiplayer
+namespace legacy
 {
     public class NetworkManager : MonoBehaviourPunCallbacks
     {

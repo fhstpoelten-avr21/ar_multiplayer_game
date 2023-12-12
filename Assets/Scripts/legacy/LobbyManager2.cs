@@ -5,7 +5,7 @@ using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Multiplayer
+namespace legacy
 {
     public class LobbyManager2 : MonoBehaviourPunCallbacks
     {

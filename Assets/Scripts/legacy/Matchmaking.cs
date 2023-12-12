@@ -1,7 +1,7 @@
 using Photon.Pun;
 using UnityEngine;
 
-namespace Multiplayer
+namespace legacy
 {
     public class Matchmaking : MonoBehaviourPunCallbacks
     {

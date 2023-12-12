@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Multiplayer
+namespace legacy
 {
     public class MainMenuManager : MonoBehaviour
     {
