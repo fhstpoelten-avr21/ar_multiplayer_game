@@ -11,7 +11,7 @@ public class ImageTracker : MonoBehaviour
 
     private void Awake()
     {
-        
+        trackedImageManager = GetComponent<ARTrackedImageManager>();
     }
 
     private void OnEnable()

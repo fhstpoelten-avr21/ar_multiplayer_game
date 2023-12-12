@@ -492,6 +492,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202457188}
   m_CullTransparentMesh: 0
+--- !u!134 &259737401
+PhysicMaterial:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DynamicMaterial
+  dynamicFriction: 0
+  staticFriction: 0
+  bounciness: 0
+  frictionCombine: 1
+  bounceCombine: 1
 --- !u!1 &308426392
 GameObject:
   m_ObjectHideFlags: 0
@@ -2110,7 +2122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eb61b66c0b47e04aba051601e1c8fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToFollow: {fileID: 0}
+  objectToFollow: {fileID: 2091597838}
 --- !u!114 &1643849852 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6435992527692225219, guid: 6456a8adacce52c42a07b8be4ac6184c,
@@ -2256,18 +2268,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1669442794}
   m_CullTransparentMesh: 0
---- !u!134 &1744196678
-PhysicMaterial:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: DynamicMaterial
-  dynamicFriction: 0
-  staticFriction: 0
-  bounciness: 0
-  frictionCombine: 1
-  bounceCombine: 1
 --- !u!1 &1775575777
 GameObject:
   m_ObjectHideFlags: 0
@@ -5303,7 +5303,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 1744196678}
+      objectReference: {fileID: 259737401}
     - target: {fileID: 3781335126789325680, guid: 6456a8adacce52c42a07b8be4ac6184c,
         type: 3}
       propertyPath: m_Materials.Array.size
