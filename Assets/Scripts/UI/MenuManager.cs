@@ -20,4 +20,10 @@ public class MenuManager : MonoBehaviour
         Debug.Log("Exit Game");
         Application.Quit();
     }
+    
+    public void BackMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("main_menu");
+    }
 }
+
