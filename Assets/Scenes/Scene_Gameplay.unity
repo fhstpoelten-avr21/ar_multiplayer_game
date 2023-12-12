@@ -897,8 +897,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 1522017327}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: OnQuitMatchButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -1386,11 +1386,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefabs:
   - {fileID: 8910320841310209502, guid: 1579f589659883849ab7c94ec1fc1d6e, type: 3}
-  - {fileID: 8910320841310209502, guid: 26de3b3a7a7a7794782ed0aee352c580, type: 3}
-  - {fileID: 8910320841310209502, guid: 3d14c3433a8f3564caa927fbf33125c7, type: 3}
-  - {fileID: 8910320841310209502, guid: 27376df1be3d3bf4ba7839ffac3373d2, type: 3}
-  - {fileID: 8910320841310209502, guid: 441cfd005ac41ab408a0d6eeb4e43120, type: 3}
-  - {fileID: 8910320841310209502, guid: 0263b5f2549081749b5476df2b0e83d1, type: 3}
+  - {fileID: 8910320841310209502, guid: 4ca59752e166248b59d17faaab040139, type: 3}
+  - {fileID: 8910320841310209502, guid: 18182bef3d9994a23b6f32b512d2da8c, type: 3}
+  - {fileID: 8910320841310209502, guid: c0f0eeb3ff3654292b3b93038c09ec5c, type: 3}
+  - {fileID: 8910320841310209502, guid: 6520c9f7fbce344d593b83d507de5d40, type: 3}
+  - {fileID: 8910320841310209502, guid: 39b5b3a3b717b4a5bbeb066b7a1e270e, type: 3}
   spawnPositions:
   - {fileID: 950113033}
   - {fileID: 931434789}
@@ -3508,7 +3508,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: fc76f944702d372449f68129a076dd71, type: 3}
+    m_Font: {fileID: 12800000, guid: a308f41f53b1747959493402f7708956, type: 3}
     m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 0
