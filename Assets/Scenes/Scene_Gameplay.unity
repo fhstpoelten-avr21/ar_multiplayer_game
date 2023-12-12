@@ -303,7 +303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &132457609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9064,7 +9064,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1636217226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9133,14 +9133,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1636217225}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6f14978284f3ed4cbe035e2eed98332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   team1Cars: []
   team2Cars: []
-  field: {fileID: 0}
+  field: {fileID: 7373444136957505520}
   fieldScale: 0.01
   carsScale: 0.005
   ball: {fileID: 8927331957935221674, guid: 516e49366a3c1b84e985cc6ee41c1a82, type: 3}
@@ -9327,7 +9327,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1705665937
 AudioListener:
   m_ObjectHideFlags: 0
@@ -12238,7 +12238,7 @@ Transform:
   m_GameObject: {fileID: 7373444136957505520}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.54999924, y: -4.7500024, z: 14.9}
+  m_LocalPosition: {x: -0.54999924, y: -1, z: 44.6}
   m_LocalScale: {x: 2.5, y: 1, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children:
