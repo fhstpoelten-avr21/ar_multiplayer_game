@@ -303,7 +303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &132457609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9270,7 +9270,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1636217226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9346,11 +9346,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team1Cars: []
   team2Cars: []
-  field: {fileID: 0}
+  field: {fileID: 7373444136957505520}
   fieldScale: 0.01
   carsScale: 0.005
   ball: {fileID: 8927331957935221674, guid: 516e49366a3c1b84e985cc6ee41c1a82, type: 3}
-  ballScale: 0.05
+  ballScale: 0.005
 --- !u!1 &1650174348
 GameObject:
   m_ObjectHideFlags: 0
@@ -9533,7 +9533,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1705665937
 AudioListener:
   m_ObjectHideFlags: 0
