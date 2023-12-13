@@ -61,10 +61,10 @@ namespace AR
             gameFieldContainer.transform.rotation = new Quaternion(0, 0, 0, 0);
             gameFieldContainer.transform.localScale = Vector3.one;
         
-            ballScript = ball.GetComponent<Ball>();
+            //ballScript = ball.GetComponent<Ball>();
         
-            instantiateField();
-            instantiateBall();
+            //instantiateField();
+            //instantiateBall();
             //instantiateTeams();
         }
 
