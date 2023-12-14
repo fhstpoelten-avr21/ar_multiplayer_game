@@ -9,7 +9,7 @@ namespace Network
     {
 
         public GameObject[] playerPrefabs;
-        public Transform[] spawnPositions;
+        public Transform[][] spawnPositions;
 
         public GameObject battleArenaGameobject;
 
