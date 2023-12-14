@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -696,7 +696,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lobby
+  m_text: Quickmatch
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f7f6d58f6638465468333e7f9f766cf2, type: 2}
   m_sharedMaterial: {fileID: 1574127880865297671, guid: f7f6d58f6638465468333e7f9f766cf2,
@@ -1456,7 +1456,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hosten/Joinen
+  m_text: Host | Join
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f7f6d58f6638465468333e7f9f766cf2, type: 2}
   m_sharedMaterial: {fileID: 1574127880865297671, guid: f7f6d58f6638465468333e7f9f766cf2,
@@ -1637,7 +1637,7 @@ GameObject:
   - component: {fileID: 1900273243}
   - component: {fileID: 1900273246}
   m_Layer: 5
-  m_Name: Lobby-Button
+  m_Name: Quickmatch-Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
