@@ -15,7 +15,7 @@ public class Ball : MonoBehaviour
         ball = GetComponent<Rigidbody>();
         render = GetComponent<Renderer>();
         render.sharedMaterial = materials[0];
-        //Freeze();
+        Freeze();
     }
     void Update()
     {
@@ -48,11 +48,13 @@ public class Ball : MonoBehaviour
     public void Freeze()
     {
         ball.isKinematic = true;
+        ball.useGravity = false;
     }
 
     public void Unfreeze()
     {
         ball.isKinematic = false;
+        ball.useGravity = true;
     }
 
     

@@ -22,6 +22,7 @@ public class ARPlacementAndPlaneDetectionController : MonoBehaviour
         m_ARPlaneManager = GetComponent<ARPlaneManager>();
         m_ARPlacementManager = GetComponent<ARPlacementManager>();
 
+
     }
 
 

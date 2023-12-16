@@ -15,7 +15,6 @@ namespace Network
         public GameObject uI_LobbyGameobject;
         public GameObject uI_3DGameobject;
 
-
         [Header("Connection Status UI")]
         public GameObject uI_ConnectionStatusGameobject;
         public Text connectionStatusText;

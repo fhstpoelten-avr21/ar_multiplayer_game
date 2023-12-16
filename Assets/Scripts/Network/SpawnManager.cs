@@ -44,9 +44,6 @@ namespace Network
         {
             gameManager = GameManager.Instance;
 
-            carsContainer.transform.SetParent(battleArenaGameobject.transform);
-            carsContainer.transform.localScale = Vector3.one;
-
             gameFieldGameObject = fieldAreaGameObject.transform.GetChild(0).gameObject;
             team1Area = gameFieldGameObject.transform.Find("Team1Area").gameObject;
             team2Area = gameFieldGameObject.transform.Find("Team2Area").gameObject;
@@ -191,11 +188,6 @@ namespace Network
             return null;
         }
 
-        private void SetPlayerAtSpawnPoint(GameObject player, GameObject spawnPosition)
-        {
-
-        }
-
         // Assigns random spawn position of specific Team
         private GameObject AssignSpawnPoint(int teamIndex)
         {
@@ -237,9 +229,7 @@ namespace Network
                 string spawnPositionName = (string)data[5];
 
                 GameObject player = Instantiate(playerPrefabs[receivedPlayerSelectionData], receivedPosition + battleArenaGameobject.transform.position, receivedRotation);
-                Vector3 scale = player.transform.localScale;
                 player.transform.SetParent(carsContainer.transform);
-                player.transform.localScale = scale;
                 GameObject spawnPoint = GetSpawnByTeamAndName(team, spawnPositionName);
                 PlayerSetup playerSetup = player.GetComponent<PlayerSetup>();
                 playerSetup.spawnPoint = spawnPoint;
@@ -282,9 +272,7 @@ namespace Network
                 GameObject spawnPoint = AssignSpawnPoint(team);
 
                 GameObject playerGameobject = Instantiate(playerPrefabs[(int)playerSelectionNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
-                Vector3 scale = playerGameobject.transform.localScale;
                 playerGameobject.transform.SetParent(carsContainer.transform);
-                playerGameobject.transform.localScale = scale;
                 PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
                 playerSetup.spawnPoint = spawnPoint;
                 gameManager.SetPlayerJoined(team, PhotonNetwork.LocalPlayer.NickName, playerGameobject);

@@ -4,16 +4,24 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UI;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 public class GameManager :MonoBehaviourPunCallbacks
 {
 
     public static GameManager Instance;
-    
+
     [Header("UI")]
+
+    public GameObject uI_JoinedRoomInfoGameObject;
     public GameObject uI_InformPanelGameobject;
     public TextMeshProUGUI uI_InformText;
+
+    [Space]
+    public GameObject uI_GameFieldPlacement;
+
+    [Space]
     public GameObject searchForGamesButtonGameobject;
     public GameObject adjust_Button;
     public GameObject raycastCenter_Image;
@@ -42,7 +50,9 @@ public class GameManager :MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
+        uI_JoinedRoomInfoGameObject.SetActive(false);
         uI_InformPanelGameobject.SetActive(true);
+        uI_GameFieldPlacement.SetActive(true);
 
         team1Players = new Dictionary<string, GameObject>();
         team2Players = new Dictionary<string, GameObject>();
@@ -175,6 +185,12 @@ public class GameManager :MonoBehaviourPunCallbacks
         {
             team2Players.Add(name, car);
         }
+    }
+
+    public void ShowSearchForPlayersInfoPanel()
+    {
+        uI_JoinedRoomInfoGameObject.SetActive(true);
+        uI_GameFieldPlacement.SetActive(false);
     }
     #endregion
 }
