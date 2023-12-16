@@ -11,7 +11,7 @@ public class ImageTracker : MonoBehaviour
 
     private void Awake()
     {
-        objectToFollow.SetActive(false);
+        //objectToFollow.SetActive(false);
         trackedImageManager = GetComponent<ARTrackedImageManager>();
     }
 

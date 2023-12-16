@@ -236,7 +236,7 @@ namespace Network
                 int team = (int)data[4];
                 string spawnPositionName = (string)data[5];
 
-                GameObject player = Instantiate(playerPrefabs[receivedPlayerSelectionData], receivedPosition, receivedRotation);
+                GameObject player = Instantiate(playerPrefabs[receivedPlayerSelectionData], receivedPosition + battleArenaGameobject.transform.position, receivedRotation);
                 Vector3 scale = player.transform.localScale;
                 player.transform.SetParent(carsContainer.transform);
                 player.transform.localScale = scale;
@@ -295,8 +295,7 @@ namespace Network
                 {
                     object[] data = new object[]
                     {
-
-                        playerGameobject.transform.position, playerGameobject.transform.rotation, _photonView.ViewID, playerSelectionNumber, team, spawnPoint.name
+                        playerGameobject.transform.position - battleArenaGameobject.transform.position, playerGameobject.transform.rotation, _photonView.ViewID, playerSelectionNumber, team, spawnPoint.name
                     };
 
 
