@@ -56,10 +56,10 @@ namespace AR
             planeManager = FindObjectOfType<ARPlaneManager>();
             xrOrigin = FindObjectOfType<XROrigin>();
 
-            gameFieldContainer = new GameObject("gameFieldContainer");
-            gameFieldContainer.transform.position = Vector3.zero;
-            gameFieldContainer.transform.rotation = new Quaternion(0, 0, 0, 0);
-            gameFieldContainer.transform.localScale = Vector3.one;
+            //gameFieldContainer = new GameObject("gameFieldContainer");
+            //gameFieldContainer.transform.position = Vector3.zero;
+            //gameFieldContainer.transform.rotation = new Quaternion(0, 0, 0, 0);
+            //gameFieldContainer.transform.localScale = Vector3.one;
         
             //ballScript = ball.GetComponent<Ball>();
         

@@ -12,6 +12,8 @@ namespace Player
         public GameObject carController;
         public GameObject mobileUI;
 
+        public GameObject spawnPoint;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -57,6 +59,12 @@ namespace Player
 
         }
 
-   
+        void Respawn()
+        {
+            if (spawnPoint != null)
+            {
+                transform.position = spawnPoint.transform.parent.localPosition + spawnPoint.transform.localPosition;
+            }
+        }
     }
 }

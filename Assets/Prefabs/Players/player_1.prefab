@@ -28931,7 +28931,7 @@ Transform:
   m_GameObject: {fileID: 8910320841310209502}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -29042,6 +29042,7 @@ MonoBehaviour:
   playerNameText: {fileID: 6447248386557950654}
   carController: {fileID: 5367698002354160470}
   mobileUI: {fileID: 5907710660690409026}
+  spawnPoint: {fileID: 0}
 --- !u!114 &788912229904753815
 MonoBehaviour:
   m_ObjectHideFlags: 0

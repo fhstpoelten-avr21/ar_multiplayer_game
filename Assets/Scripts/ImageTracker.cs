@@ -11,6 +11,7 @@ public class ImageTracker : MonoBehaviour
 
     private void Awake()
     {
+        objectToFollow.SetActive(false);
         trackedImageManager = GetComponent<ARTrackedImageManager>();
     }
 
@@ -26,6 +27,7 @@ public class ImageTracker : MonoBehaviour
 
     private void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs)
     {
+        objectToFollow.SetActive(true);
         foreach (var trackedImage in eventArgs.added)
         {
             UpdateObjectPose(trackedImage);
@@ -41,6 +43,6 @@ public class ImageTracker : MonoBehaviour
     {
         // Update the position and rotation of your GameObject
         objectToFollow.transform.position = trackedImage.transform.position;
-        objectToFollow.transform.rotation = trackedImage.transform.rotation;
+        //objectToFollow.transform.rotation = trackedImage.transform.rotation;
     }
 }

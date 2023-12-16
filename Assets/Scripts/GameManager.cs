@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -17,6 +18,11 @@ public class GameManager :MonoBehaviourPunCallbacks
     public GameObject adjust_Button;
     public GameObject raycastCenter_Image;
 
+    // max allowed players to join one session
+    public int maxPlayer = 12;
+    public Dictionary<string, GameObject> team1Players;
+    public Dictionary<string, GameObject> team2Players;
+    public bool arenaIsSet = false;
 
     // Called once, before start
     // makes sure it acts as a singleton (only one Instance)
@@ -37,8 +43,9 @@ public class GameManager :MonoBehaviourPunCallbacks
     void Start()
     {
         uI_InformPanelGameobject.SetActive(true);
-       
 
+        team1Players = new Dictionary<string, GameObject>();
+        team2Players = new Dictionary<string, GameObject>();
     }
 
     // Update is called once per frame
@@ -50,6 +57,7 @@ public class GameManager :MonoBehaviourPunCallbacks
     #region UI Callback Methods
     public void JoinRandomRoom()
     {
+        Debug.Log("JoinRandomRoom::");
         uI_InformText.text = "Searching for available rooms...";
 
         PhotonNetwork.JoinRandomRoom();
@@ -83,7 +91,7 @@ public class GameManager :MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
       
-        Debug.Log(message);
+        Debug.Log("OnJoinRandomFailed" + message);
         uI_InformText.text = message;
 
         CreateAndJoinRoom();
@@ -113,6 +121,7 @@ public class GameManager :MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
+
         Debug.Log(newPlayer.NickName + " joined to "+ PhotonNetwork.CurrentRoom.Name+ " Player count "+ PhotonNetwork.CurrentRoom.PlayerCount);
         uI_InformText.text = newPlayer.NickName + " joined to " + PhotonNetwork.CurrentRoom.Name + " Player count " + PhotonNetwork.CurrentRoom.PlayerCount;
 
@@ -134,6 +143,7 @@ public class GameManager :MonoBehaviourPunCallbacks
     #region PRIVATE Methods
     void CreateAndJoinRoom()
     {
+        Debug.Log("CreateAndJoinRoom:: ");
         string randomRoomName = "Room" + Random.Range(0,1000);
 
         RoomOptions roomOptions = new RoomOptions();
@@ -154,6 +164,17 @@ public class GameManager :MonoBehaviourPunCallbacks
 
     #endregion
 
-
-
+    #region PUBLIC Methods
+    public void SetPlayerJoined(int team, string name, GameObject car)
+    {
+        if (team == 0)
+        {
+            team1Players.Add(name, car);
+        }
+        else
+        {
+            team2Players.Add(name, car);
+        }
+    }
+    #endregion
 }
