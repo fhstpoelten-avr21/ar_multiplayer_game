@@ -2421,7 +2421,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &523228106
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6621,13 +6621,13 @@ MonoBehaviour:
   uI_JoinedRoomInfoGameObject: {fileID: 1464630476}
   uI_InformPanelGameobject: {fileID: 212251898}
   uI_InformText: {fileID: 243443568}
-  uI_Team1Players: {fileID: 0}
-  uI_Team2Players: {fileID: 0}
+  uI_TeamInfoPanel: {fileID: 523228105}
   uI_GameFieldPlacement: {fileID: 1615054993}
   searchForGamesButtonGameobject: {fileID: 623289035}
   adjust_Button: {fileID: 905712417}
   raycastCenter_Image: {fileID: 1543558401}
   maxPlayer: 12
+  spawnManagerGameObject: {fileID: 415973139}
 --- !u!1 &1527010675
 GameObject:
   m_ObjectHideFlags: 0
@@ -11763,7 +11763,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1615054994
 RectTransform:
   m_ObjectHideFlags: 0

@@ -221,7 +221,8 @@ namespace Network
         #region Photon Callback Methods
         void OnEvent(EventData photonEvent)
         {
-            Debug.Log("EVENT SHOT: " + (object[])photonEvent.CustomData);
+            bool isSpawnCode = photonEvent.Code == (byte)RaiseEventCodes.PlayerSpawnEventCode;
+            Debug.Log("EVENT SHOT: " + isSpawnCode);
             if (photonEvent.Code == (byte)RaiseEventCodes.PlayerSpawnEventCode)
             {
                 object[] data = (object[])photonEvent.CustomData;

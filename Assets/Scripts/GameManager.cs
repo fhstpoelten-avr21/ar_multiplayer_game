@@ -37,6 +37,9 @@ public class GameManager :MonoBehaviourPunCallbacks
     // max allowed players to join one session
     public int maxPlayer = 12;
 
+    [Header("Scripts")]
+    public GameObject spawnManagerGameObject;
+
     private Dictionary<string, GameObject>[] teamsPlayers;
 
     private SpawnManager spawnManager;
@@ -69,10 +72,9 @@ public class GameManager :MonoBehaviourPunCallbacks
         GameObject uI_Team2 = uI_TeamInfoPanel.transform.Find("Team2").gameObject;
         uI_TeamPlayers = new TextMeshProUGUI[][]{ GetChildrenOfComponent<TextMeshProUGUI>(uI_Team1.transform.Find("Players").gameObject), GetChildrenOfComponent<TextMeshProUGUI>(uI_Team2.transform.Find("Players").gameObject)};
 
-        teamsPlayers[0] = new Dictionary<string, GameObject>();
-        teamsPlayers[1] = new Dictionary<string, GameObject>();
+        teamsPlayers = new Dictionary<string, GameObject>[]{ new Dictionary<string, GameObject>(), new Dictionary<string, GameObject>()};
 
-        spawnManager = GetComponent<SpawnManager>();
+        spawnManager = spawnManagerGameObject.GetComponent<SpawnManager>();
     }
 
     // Update is called once per frame
@@ -242,8 +244,8 @@ public class GameManager :MonoBehaviourPunCallbacks
     {
         ExitGames.Client.Photon.Hashtable props = PhotonNetwork.CurrentRoom.CustomProperties;
 
-        props["team1Players"] = teamsPlayers[0].Keys;
-        props["team2Players"] = teamsPlayers[1].Keys;
+        props["team1Players"] = teamsPlayers[0].Keys.ToArray();
+        props["team2Players"] = teamsPlayers[1].Keys.ToArray();
 
         // add available spawn points
         HashSet<GameObject>[] availableSpawnPoints = spawnManager.GetAvailableSpawnPoints();
