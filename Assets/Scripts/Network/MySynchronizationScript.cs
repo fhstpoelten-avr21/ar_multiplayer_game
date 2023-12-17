@@ -66,6 +66,7 @@ namespace Network
                 //should send position, velocity etc. data to the other players
                 stream.SendNext(rb.position-battleArenaGameobject.transform.position);
                 stream.SendNext(rb.rotation);
+                //Debug.Log("OnPhotonSerializeView:: Sending Rotation " + rb.rotation);
 
                 if (synchronizeVelocity)
                 {
@@ -84,6 +85,7 @@ namespace Network
 
                 networkedPosition = (Vector3)stream.ReceiveNext()+battleArenaGameobject.transform.position;
                 networkedRotation = (Quaternion)stream.ReceiveNext();
+                //Debug.Log("OnPhotonSerializeView:: Receiving Rotation " + networkedRotation);
 
                 if (isTeleportEnabled)
                 {
@@ -118,11 +120,6 @@ namespace Network
                 }
             }
         }
-
-
-
-
-
 
     }
 }

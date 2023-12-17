@@ -42,7 +42,6 @@ namespace UI
 
             while (!asyncSceneLoading.isDone)
             {
-                Debug.Log(asyncSceneLoading.progress);
 
                 if (asyncSceneLoading.progress >= 0.9f )
                 {

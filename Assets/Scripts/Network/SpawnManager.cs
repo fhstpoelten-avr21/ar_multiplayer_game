@@ -1,14 +1,11 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
-using Photon.Pun.Demo.PunBasics;
 using Photon.Realtime;
 using Player;
 using System;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
-using static Photon.Pun.UtilityScripts.PunTeams;
-using static UnityEngine.GraphicsBuffer;
 
 namespace Network
 {
@@ -189,12 +186,18 @@ namespace Network
         }
 
         // Assigns random spawn position of specific Team
-        private GameObject AssignSpawnPoint(int teamIndex)
+        private GameObject AssignSpawnPoint(int teamIndex, GameObject _spawnPoint = null)
         {
-            foreach (var spawnPoint in availableSpawnPoints[teamIndex])
+            if(_spawnPoint != null)
             {
-                availableSpawnPoints[teamIndex].Remove(spawnPoint);
-                return spawnPoint;
+                availableSpawnPoints[teamIndex].Remove(_spawnPoint);
+            } else
+            {
+                foreach (var spawnPoint in availableSpawnPoints[teamIndex])
+                {
+                    availableSpawnPoints[teamIndex].Remove(spawnPoint);
+                    return spawnPoint;
+                }
             }
 
             // Handle case where no spawn points are available
@@ -218,61 +221,60 @@ namespace Network
         #region Photon Callback Methods
         void OnEvent(EventData photonEvent)
         {
+            Debug.Log("EVENT SHOT: " + (object[])photonEvent.CustomData);
             if (photonEvent.Code == (byte)RaiseEventCodes.PlayerSpawnEventCode)
             {
-
                 object[] data = (object[])photonEvent.CustomData;
                 Vector3 receivedPosition = (Vector3)data[0];
                 Quaternion receivedRotation = (Quaternion)data[1];
-                int receivedPlayerSelectionData = (int)data[3];
-                int team = (int)data[4];
-                string spawnPositionName = (string)data[5];
 
-                GameObject player = Instantiate(playerPrefabs[receivedPlayerSelectionData], receivedPosition + battleArenaGameobject.transform.position, receivedRotation);
+                // get player through Id to get custom properties
+                int playerId = (int)data[3];
+                Photon.Realtime.Player photonPlayer = PhotonNetwork.CurrentRoom.Players[playerId];
+                Hashtable playerCustomProps = photonPlayer.CustomProperties;
+
+                // get data through custom properties of player
+                int playerSelectionNumber = (int)playerCustomProps["playerSelectionNumber"];
+                int team = (int)playerCustomProps["team"];
+                string spawnPositionName = (string)playerCustomProps["spawnPoint"];
+
+                // instantiate Player
+                GameObject player = Instantiate(playerPrefabs[playerSelectionNumber], receivedPosition + battleArenaGameobject.transform.position, receivedRotation);
+                Vector3 scale = player.transform.localScale;
                 player.transform.SetParent(carsContainer.transform);
+                player.transform.localScale = scale;
+
+                // assign spawn Point
                 GameObject spawnPoint = GetSpawnByTeamAndName(team, spawnPositionName);
+                AssignSpawnPoint(team, spawnPoint);
                 PlayerSetup playerSetup = player.GetComponent<PlayerSetup>();
                 playerSetup.spawnPoint = spawnPoint;
 
                 PhotonView _photonView = player.GetComponent<PhotonView>();
                 _photonView.ViewID = (int)data[2];
-
-            }
-        }
-
-
-
-        public override void OnJoinedRoom()
-        {
-            Debug.Log("ENTER OnJoinedRoom()");
-            if (PhotonNetwork.IsConnectedAndReady)
-            {   
-                SpawnPlayer();
             }
         }
         #endregion
 
-
         #region Private Methods
-        private void SpawnPlayer()
+        public GameObject SpawnPlayer()
         {
             //TODO - Implement better Spawn System ( see PlacementIndicator.cs::instantiateTeams() )
-            Debug.Log("ENTER SpawnPlayer()");
+            Debug.Log("SM:: ENTER SpawnPlayer()");
             object playerSelectionNumber;
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(Constants.PLAYER_SELECTION_NUMBER, out playerSelectionNumber))
             {
                 Debug.Log("Player selection number is " + (int)playerSelectionNumber);
 
-                //int randomSpawnPoint = UnityEngine.Random.Range(0, spawnPositions.Length - 1);
-                //Vector3 instantiatePosition = spawnPositions[randomSpawnPoint].position;
-
                 // TODO: get player's choice of Team instead!
-                // assign to team with less Players
-                int team = Mathf.Min(gameManager.team1Players.Count, gameManager.team2Players.Count);
+                // Currently: assign to team with less Players
+                int team = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
                 GameObject spawnPoint = AssignSpawnPoint(team);
 
                 GameObject playerGameobject = Instantiate(playerPrefabs[(int)playerSelectionNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
+                Vector3 scale = playerGameobject.transform.localScale;
                 playerGameobject.transform.SetParent(carsContainer.transform);
+                playerGameobject.transform.localScale = scale;
                 PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
                 playerSetup.spawnPoint = spawnPoint;
                 gameManager.SetPlayerJoined(team, PhotonNetwork.LocalPlayer.NickName, playerGameobject);
@@ -281,29 +283,7 @@ namespace Network
 
                 if (PhotonNetwork.AllocateViewID(_photonView))
                 {
-                    object[] data = new object[]
-                    {
-                        playerGameobject.transform.position - battleArenaGameobject.transform.position, playerGameobject.transform.rotation, _photonView.ViewID, playerSelectionNumber, team, spawnPoint.name
-                    };
-
-
-                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions
-                    {
-                        Receivers = ReceiverGroup.Others,
-                        CachingOption =EventCaching.AddToRoomCache
-
-                    };
-
-
-                    SendOptions sendOptions = new SendOptions
-                    {
-                        Reliability = true
-                    };
-
-                    //Raise Events!
-                    PhotonNetwork.RaiseEvent((byte)RaiseEventCodes.PlayerSpawnEventCode,data, raiseEventOptions,sendOptions);
-
-
+                    return playerGameobject;
                 }
                 else
                 {
@@ -311,17 +291,77 @@ namespace Network
                     Debug.Log("Failed to allocate a viewID");
                     Destroy(playerGameobject);
                 }
-
-
-
             }
+
+            return null;
         }
 
+        public void SpawnOtherPlayers()
+        {
+            Dictionary<int, Photon.Realtime.Player> players = PhotonNetwork.CurrentRoom.Players;
 
+            foreach (Photon.Realtime.Player player in players.Values)
+            {
+                Hashtable props = player.CustomProperties;
 
+                int teamIndex = (int)props["team"];
+                int playerSelectionNumber = (int)props["playerSelectionNumber"];
+                string spawnPoint = (string)props["spawnPoint"];
+
+                // assign spawnpoint + remove from available spawn points list
+                GameObject spawnPointGameObject = GetSpawnByTeamAndName(teamIndex, spawnPoint);
+                AssignSpawnPoint(teamIndex, spawnPointGameObject);
+
+                // spawn other player
+                GameObject playerGameobject = Instantiate(playerPrefabs[playerSelectionNumber], spawnPointGameObject.transform.position, spawnPointGameObject.transform.rotation);
+                Vector3 scale = playerGameobject.transform.localScale;
+                playerGameobject.transform.SetParent(carsContainer.transform);
+                playerGameobject.transform.localScale = scale;
+                PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
+                playerSetup.spawnPoint = spawnPointGameObject;
+                gameManager.SetPlayerJoined(teamIndex, PhotonNetwork.LocalPlayer.NickName, playerGameobject);
+            }
+        }
         #endregion
 
+        #region Public Methods
+        public GameObject[][] GetAllSpawnPoints()
+        {
+            return spawnPoints;
+        }
 
+        public HashSet<GameObject>[] GetAvailableSpawnPoints()
+        {
+            return availableSpawnPoints;
+        }
+
+        public void RaiseNewPlayerEvent(GameObject player)
+        {
+            PhotonView _photonView = player.GetComponent<PhotonView>();
+
+            int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
+
+            object[] data = new object[]
+            {
+                player.transform.position - battleArenaGameobject.transform.position, player.transform.rotation, _photonView.ViewID, playerId
+            };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.Others,
+                CachingOption = EventCaching.AddToRoomCache
+
+            };
+
+            SendOptions sendOptions = new SendOptions
+            {
+                Reliability = true
+            };
+
+            //Raise Events!
+            PhotonNetwork.RaiseEvent((byte)RaiseEventCodes.PlayerSpawnEventCode, data, raiseEventOptions, sendOptions);
+        }
+        #endregion
 
 
     }
