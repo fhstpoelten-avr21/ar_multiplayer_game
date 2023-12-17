@@ -56,6 +56,18 @@ public class GameManager :MonoBehaviourPunCallbacks
 
         team1Players = new Dictionary<string, GameObject>();
         team2Players = new Dictionary<string, GameObject>();
+
+	  // Find the ball with the tag "Ball" and add a collider and rigidbody to it
+        GameObject ball = GameObject.FindGameObjectWithTag("Ball");
+        if (ball != null)
+        {
+            // Add a collider
+            Collider ballCollider = ball.AddComponent<SphereCollider>();
+
+            // Add a rigidbody to make collisions work
+            Rigidbody ballRigidbody = ball.AddComponent<Rigidbody>();
+            ballRigidbody.isKinematic = true; // If you don't want physics to affect the ball, set this to true
+        }
     }
 
     // Update is called once per frame
@@ -193,4 +205,15 @@ public class GameManager :MonoBehaviourPunCallbacks
         uI_GameFieldPlacement.SetActive(false);
     }
     #endregion
+     void OnCollisionEnter(Collision collision)
+        {
+            // Check if the collision involves the ball
+            if (collision.gameObject.CompareTag("Ball"))
+            {
+                // Handle the collision event here
+                Debug.Log("Ball collided with " + collision.gameObject.name);
+
+                // You can trigger events based on the collision, update scores, etc.
+            }
+        }
 }
