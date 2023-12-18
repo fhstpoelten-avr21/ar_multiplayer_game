@@ -267,23 +267,31 @@ namespace Network
             {
                 Debug.Log("Player selection number is " + (int)playerSelectionNumber);
 
-                // TODO: get player's choice of Team instead!
-                // Currently: assign to team with less Players
+                // assign spawnpoint of specific team
                 int team = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
                 GameObject spawnPoint = AssignSpawnPoint(team);
 
+                // instantiate player
                 GameObject playerGameobject = Instantiate(playerPrefabs[(int)playerSelectionNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
                 Vector3 scale = playerGameobject.transform.localScale;
                 playerGameobject.transform.SetParent(carsContainer.transform);
                 playerGameobject.transform.localScale = scale;
+
+                // save spawnPoint
                 PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
                 playerSetup.spawnPoint = spawnPoint;
                 gameManager.SetPlayerJoined(team, PhotonNetwork.LocalPlayer.NickName, playerGameobject);
+
+                // set spawnPointName to properties
+                PhotonNetwork.LocalPlayer.CustomProperties["spawnPoint"] = spawnPoint.name;
 
                 PhotonView _photonView = playerGameobject.GetComponent<PhotonView>();
 
                 if (PhotonNetwork.AllocateViewID(_photonView))
                 {
+                    // set photonViewID to properties and save properties in network
+                    PhotonNetwork.LocalPlayer.CustomProperties["photonViewID"] = _photonView.ViewID;
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(PhotonNetwork.LocalPlayer.CustomProperties);
                     return playerGameobject;
                 }
                 else
@@ -303,24 +311,31 @@ namespace Network
 
             foreach (Photon.Realtime.Player player in players.Values)
             {
-                Hashtable props = player.CustomProperties;
+                if(player.ActorNumber != PhotonNetwork.LocalPlayer.ActorNumber)
+                {
+                    Debug.Log("Spawning another player with id " + player.ActorNumber);
+                    Hashtable props = player.CustomProperties;
 
-                int teamIndex = (int)props["team"];
-                int playerSelectionNumber = (int)props["playerSelectionNumber"];
-                string spawnPoint = (string)props["spawnPoint"];
+                    int teamIndex = (int)props["team"];
+                    int playerSelectionNumber = (int)props["Player_Selection_Number"];
+                    string spawnPoint = (string)props["spawnPoint"];
 
-                // assign spawnpoint + remove from available spawn points list
-                GameObject spawnPointGameObject = GetSpawnByTeamAndName(teamIndex, spawnPoint);
-                AssignSpawnPoint(teamIndex, spawnPointGameObject);
+                    // assign spawnpoint + remove from available spawn points list
+                    GameObject spawnPointGameObject = GetSpawnByTeamAndName(teamIndex, spawnPoint);
+                    AssignSpawnPoint(teamIndex, spawnPointGameObject);
 
-                // spawn other player
-                GameObject playerGameobject = Instantiate(playerPrefabs[playerSelectionNumber], spawnPointGameObject.transform.position, spawnPointGameObject.transform.rotation);
-                Vector3 scale = playerGameobject.transform.localScale;
-                playerGameobject.transform.SetParent(carsContainer.transform);
-                playerGameobject.transform.localScale = scale;
-                PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
-                playerSetup.spawnPoint = spawnPointGameObject;
-                gameManager.SetPlayerJoined(teamIndex, PhotonNetwork.LocalPlayer.NickName, playerGameobject);
+                    // spawn other player
+                    GameObject playerGameobject = Instantiate(playerPrefabs[playerSelectionNumber], spawnPointGameObject.transform.position, spawnPointGameObject.transform.rotation);
+                    Vector3 scale = playerGameobject.transform.localScale;
+                    playerGameobject.transform.SetParent(carsContainer.transform);
+                    playerGameobject.transform.localScale = scale;
+
+                    // assign spawnpoint
+                    PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
+                    playerSetup.spawnPoint = spawnPointGameObject;
+                    gameManager.SetPlayerJoined(teamIndex, PhotonNetwork.LocalPlayer.NickName, playerGameobject);
+
+                }
             }
         }
         #endregion

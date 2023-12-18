@@ -2,15 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ExitGames.Client.Photon;
-using ExitGames.Client.Photon.StructWrapping;
 using Network;
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using TMPro;
 using UI;
-using Unity.Tutorials.Core.Editor;
 using UnityEngine;
 
 public class GameManager :MonoBehaviourPunCallbacks
@@ -92,8 +88,6 @@ public class GameManager :MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRandomRoom();
 
         searchForGamesButtonGameobject.SetActive(false);
-
-
     }
 
 
@@ -114,6 +108,7 @@ public class GameManager :MonoBehaviourPunCallbacks
     public void JoinTeam(int team)
     {
         uI_TeamInfoPanel.SetActive(false);
+        uI_JoinedRoomInfoGameObject.SetActive(true);
 
         string name = PhotonNetwork.LocalPlayer.NickName;
 
@@ -161,6 +156,8 @@ public class GameManager :MonoBehaviourPunCallbacks
     {
         adjust_Button.SetActive(false);
         raycastCenter_Image.SetActive(false);
+        uI_GameFieldPlacement.SetActive(false);
+        uI_JoinedRoomInfoGameObject.SetActive(false);
 
         // let player choose his team
         uI_TeamInfoPanel.SetActive(true);
