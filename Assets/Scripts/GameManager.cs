@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ExitGames.Client.Photon.StructWrapping;
 using Network;
 using Photon.Pun;
 using Photon.Realtime;
@@ -159,9 +160,6 @@ public class GameManager :MonoBehaviourPunCallbacks
         uI_GameFieldPlacement.SetActive(false);
         uI_JoinedRoomInfoGameObject.SetActive(false);
 
-        // let player choose his team
-        uI_TeamInfoPanel.SetActive(true);
-
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
             uI_InformText.text = "Joined to " + PhotonNetwork.CurrentRoom.Name + ". Waiting for other players...";
@@ -170,6 +168,9 @@ public class GameManager :MonoBehaviourPunCallbacks
         {
             uI_InformText.text = "Joined to " + PhotonNetwork.CurrentRoom.Name;
             StartCoroutine(DeactivateAfterSeconds(uI_InformPanelGameobject, 2.0f));
+            
+            // update UI List of Players for each Team
+            UpdateTeamList();
 
             // retrieve room properties and update local variables
             RetrieveRoomProperties();
@@ -178,6 +179,9 @@ public class GameManager :MonoBehaviourPunCallbacks
             spawnManager.SpawnOtherPlayers();
         }
 
+        // let player choose his team
+        uI_TeamInfoPanel.SetActive(true);
+        
         Debug.Log("GM::OnJoinedRoom:: - joined to " + PhotonNetwork.CurrentRoom.Name);
     }
 
@@ -287,10 +291,39 @@ public class GameManager :MonoBehaviourPunCallbacks
         teamsPlayers[team][name] = car;
     }
 
+    public Dictionary<string, GameObject>[] GetPlayerList()
+    {
+        return teamsPlayers;
+    }
+
+    public GameObject FindPlayerGameObject(int team, string playerName)
+    {
+        GameObject player = null;
+        teamsPlayers[team].TryGetValue(playerName, out player);
+
+        return player;
+    }
+
     public void ShowSearchForPlayersInfoPanel()
     {
         uI_JoinedRoomInfoGameObject.SetActive(true);
         uI_GameFieldPlacement.SetActive(false);
+    }
+
+    public void UpdateTeamList()
+    {
+        var players = PhotonNetwork.CurrentRoom.Players;
+
+        int index = 0;
+        foreach (var player in players.Values)
+        {
+            if (player.CustomProperties.ContainsKey("team"))
+            {
+                string name = player.NickName;
+                int team = (int)player.CustomProperties["team"];
+                uI_TeamPlayers[team][index++].text = name;
+            }
+        }
     }
     #endregion
 }

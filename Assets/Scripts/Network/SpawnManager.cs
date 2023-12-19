@@ -76,6 +76,7 @@ namespace Network
             }
         }
 
+        #region Legacy dynamic spawn position calculation
         //private void InitSpawnPositionsOld()
         //{
         //    int maxLanes = 3;
@@ -171,6 +172,7 @@ namespace Network
 
         //    return slotGrid;
         //}
+        #endregion
 
         public GameObject GetSpawnByTeamAndName(int teamIndex, string spawnPointName)
         {
@@ -221,56 +223,80 @@ namespace Network
         #region Photon Callback Methods
         void OnEvent(EventData photonEvent)
         {
-            bool isSpawnCode = photonEvent.Code == (byte)RaiseEventCodes.PlayerSpawnEventCode;
-            Debug.Log("EVENT SHOT: " + isSpawnCode);
+            
+            // Other Player joined
             if (photonEvent.Code == (byte)RaiseEventCodes.PlayerSpawnEventCode)
             {
+                Debug.Log("OnEvent:: player spawned!");
                 object[] data = (object[])photonEvent.CustomData;
-                Vector3 receivedPosition = (Vector3)data[0];
-                Quaternion receivedRotation = (Quaternion)data[1];
-
+                
                 // get player through Id to get custom properties
                 int playerId = (int)data[3];
+                
+                // if player spawned is me => don't continue
+                if (playerId == PhotonNetwork.LocalPlayer.ActorNumber)
+                {
+                    return;
+                }
+                
                 Photon.Realtime.Player photonPlayer = PhotonNetwork.CurrentRoom.Players[playerId];
                 Hashtable playerCustomProps = photonPlayer.CustomProperties;
-
-                // get data through custom properties of player
-                int playerSelectionNumber = (int)playerCustomProps["playerSelectionNumber"];
+                
                 int team = (int)playerCustomProps["team"];
-                string spawnPositionName = (string)playerCustomProps["spawnPoint"];
+                    
+                Debug.Log($"OnEvent:: myActor_{PhotonNetwork.LocalPlayer.ActorNumber} thisActor_{photonPlayer.ActorNumber}");
+                Debug.Log($"OnEvent:: player found? {gameManager.FindPlayerGameObject(team, photonPlayer.NickName)}");
+                
+                // if player already spawned on this client => dont spawn again
+                if (!gameManager.FindPlayerGameObject(team, photonPlayer.NickName))
+                {
+                    Vector3 receivedPosition = (Vector3)data[0];
+                    Quaternion receivedRotation = (Quaternion)data[1];
 
-                // instantiate Player
-                GameObject player = Instantiate(playerPrefabs[playerSelectionNumber], receivedPosition + battleArenaGameobject.transform.position, receivedRotation);
-                Vector3 scale = player.transform.localScale;
-                player.transform.SetParent(carsContainer.transform);
-                player.transform.localScale = scale;
+                    // get data through custom properties of player
+                    int playerSelectionNumber = (int)playerCustomProps[Constants.PLAYER_SELECTION_NUMBER];
+                    string spawnPositionName = (string)playerCustomProps["spawnPoint"];
 
-                // assign spawn Point
-                GameObject spawnPoint = GetSpawnByTeamAndName(team, spawnPositionName);
-                AssignSpawnPoint(team, spawnPoint);
-                PlayerSetup playerSetup = player.GetComponent<PlayerSetup>();
-                playerSetup.spawnPoint = spawnPoint;
+                    // instantiate Player
+                    GameObject player = Instantiate(playerPrefabs[playerSelectionNumber], receivedPosition + battleArenaGameobject.transform.position, receivedRotation);
+                    Vector3 scale = player.transform.localScale;
+                    player.transform.SetParent(carsContainer.transform);
+                    player.transform.localScale = scale;
 
-                PhotonView _photonView = player.GetComponent<PhotonView>();
-                _photonView.ViewID = (int)data[2];
+                    // assign spawn Point
+                    GameObject spawnPoint = GetSpawnByTeamAndName(team, spawnPositionName);
+                    AssignSpawnPoint(team, spawnPoint);
+                    PlayerSetup playerSetup = player.GetComponent<PlayerSetup>();
+                    playerSetup.spawnPoint = spawnPoint;
+
+                    PhotonView _photonView = player.GetComponent<PhotonView>();
+                    
+                    // TODO
+                    // Don't we need to set this somewhere? Maybe on Player's GameObject or something?
+                    _photonView.ViewID = (int)data[2];
+                    
+                    // updates local data
+                    gameManager.SetPlayerJoined(team, photonPlayer.NickName, player);
+                }
             }
         }
         #endregion
 
         #region Private Methods
+        // Method for local Player, not when other clients spawned!
         public GameObject SpawnPlayer()
         {
-            //TODO - Implement better Spawn System ( see PlacementIndicator.cs::instantiateTeams() )
-            Debug.Log("SM:: ENTER SpawnPlayer()");
+            Debug.Log("SpawnPlayer:: ENTER SpawnPlayer()");
             object playerSelectionNumber;
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(Constants.PLAYER_SELECTION_NUMBER, out playerSelectionNumber))
             {
-                Debug.Log("Player selection number is " + (int)playerSelectionNumber);
-
                 // assign spawnpoint of specific team
                 int team = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
+                
+                // set spawnPointName to properties
                 GameObject spawnPoint = AssignSpawnPoint(team);
-
+                PhotonNetwork.LocalPlayer.CustomProperties["spawnPoint"] = spawnPoint.name;
+                
                 // instantiate player
                 GameObject playerGameobject = Instantiate(playerPrefabs[(int)playerSelectionNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
                 Vector3 scale = playerGameobject.transform.localScale;
@@ -281,10 +307,7 @@ namespace Network
                 PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
                 playerSetup.spawnPoint = spawnPoint;
                 gameManager.SetPlayerJoined(team, PhotonNetwork.LocalPlayer.NickName, playerGameobject);
-
-                // set spawnPointName to properties
-                PhotonNetwork.LocalPlayer.CustomProperties["spawnPoint"] = spawnPoint.name;
-
+                
                 PhotonView _photonView = playerGameobject.GetComponent<PhotonView>();
 
                 if (PhotonNetwork.AllocateViewID(_photonView))
@@ -305,6 +328,7 @@ namespace Network
             return null;
         }
 
+        // should only be called once when player joins game
         public void SpawnOtherPlayers()
         {
             Dictionary<int, Photon.Realtime.Player> players = PhotonNetwork.CurrentRoom.Players;
@@ -318,7 +342,10 @@ namespace Network
 
                     int teamIndex = (int)props["team"];
                     int playerSelectionNumber = (int)props["Player_Selection_Number"];
+                    int playerViewID = (int)props["photonViewID"];
                     string spawnPoint = (string)props["spawnPoint"];
+                    
+                    Debug.Log($"$SpawnOtherPlayers:: actor_{player.ActorNumber}, team_{teamIndex}, playerModel_{playerSelectionNumber}, spawnPoint_{spawnPoint}, playerViewID_{playerViewID}");
 
                     // assign spawnpoint + remove from available spawn points list
                     GameObject spawnPointGameObject = GetSpawnByTeamAndName(teamIndex, spawnPoint);
@@ -333,8 +360,7 @@ namespace Network
                     // assign spawnpoint
                     PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
                     playerSetup.spawnPoint = spawnPointGameObject;
-                    gameManager.SetPlayerJoined(teamIndex, PhotonNetwork.LocalPlayer.NickName, playerGameobject);
-
+                    gameManager.SetPlayerJoined(teamIndex, player.NickName, playerGameobject);
                 }
             }
         }
@@ -357,8 +383,7 @@ namespace Network
 
             int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
 
-            object[] data = new object[]
-            {
+            object[] data = {
                 player.transform.position - battleArenaGameobject.transform.position, player.transform.rotation, _photonView.ViewID, playerId
             };
 
@@ -366,7 +391,6 @@ namespace Network
             {
                 Receivers = ReceiverGroup.Others,
                 CachingOption = EventCaching.AddToRoomCache
-
             };
 
             SendOptions sendOptions = new SendOptions
