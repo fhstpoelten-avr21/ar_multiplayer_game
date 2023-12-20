@@ -99,6 +99,7 @@ namespace DavidJalbert
         private float scaleAdjustment = 1;
         private float cubicScale = 1;
         private float inverseScaleAdjustment = 1;
+        private bool playerInControl = true;
 
         virtual protected void Start()
         {
@@ -240,8 +241,11 @@ namespace DavidJalbert
             // ---
 
             // steering
-            float steeringForce = (onGround ? 1 : steeringMultiplierInAir) * (forwardVelocity < 0 ? -1 : 1) * steeringBySpeed.Evaluate(getForwardVelocityDelta()) * surfaceParameters.steeringMultiplier;
-            body.MoveRotation(Quaternion.Euler(0, transform.rotation.eulerAngles.y + steering * deltaTime * steeringForce, 0));
+            if (playerInControl)
+            {
+                float steeringForce = (onGround ? 1 : steeringMultiplierInAir) * (forwardVelocity < 0 ? -1 : 1) * steeringBySpeed.Evaluate(getForwardVelocityDelta()) * surfaceParameters.steeringMultiplier;
+                body.MoveRotation(Quaternion.Euler(0, transform.rotation.eulerAngles.y + steering * deltaTime * steeringForce, 0));
+            }
             // ---
 
             // gravity
@@ -372,6 +376,11 @@ namespace DavidJalbert
         public void setSteering(float value)
         {
             inputSteering = value;
+        }
+
+        public void setPlayerInControl(bool value)
+        {
+            playerInControl = value;
         }
 
         public void setMotor(float value)

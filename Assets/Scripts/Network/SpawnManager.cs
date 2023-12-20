@@ -4,6 +4,7 @@ using Photon.Realtime;
 using Player;
 using System;
 using System.Collections.Generic;
+using DavidJalbert;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 
@@ -262,6 +263,11 @@ namespace Network
                     Vector3 scale = player.transform.localScale;
                     player.transform.SetParent(carsContainer.transform);
                     player.transform.localScale = scale;
+                    
+                    // set player is not in control over his car in this side of client
+                    // necessary to overwrite rb.rotation
+                    TinyCarController controller = player.GetComponent<PlayerSetup>().carController.GetComponent<TinyCarController>();
+                    controller.setPlayerInControl(false);
 
                     // assign spawn Point
                     GameObject spawnPoint = GetSpawnByTeamAndName(team, spawnPositionName);
@@ -270,9 +276,6 @@ namespace Network
                     playerSetup.spawnPoint = spawnPoint;
 
                     PhotonView _photonView = player.GetComponent<PhotonView>();
-                    
-                    // TODO
-                    // Don't we need to set this somewhere? Maybe on Player's GameObject or something?
                     _photonView.ViewID = (int)data[2];
                     
                     // updates local data
@@ -302,6 +305,11 @@ namespace Network
                 Vector3 scale = playerGameobject.transform.localScale;
                 playerGameobject.transform.SetParent(carsContainer.transform);
                 playerGameobject.transform.localScale = scale;
+                
+                // set player IS in control over his car in this side of client
+                // necessary for UI steering
+                TinyCarController controller = playerGameobject.GetComponent<PlayerSetup>().carController.GetComponent<TinyCarController>();
+                controller.setPlayerInControl(true);
 
                 // save spawnPoint
                 PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
@@ -356,11 +364,20 @@ namespace Network
                     Vector3 scale = playerGameobject.transform.localScale;
                     playerGameobject.transform.SetParent(carsContainer.transform);
                     playerGameobject.transform.localScale = scale;
+                    
+                    // set player is not in control over his car in this side of client
+                    // necessary to overwrite rb.rotation
+                    TinyCarController controller = playerGameobject.GetComponent<PlayerSetup>().carController.GetComponent<TinyCarController>();
+                    controller.setPlayerInControl(false);
 
                     // assign spawnpoint
                     PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
                     playerSetup.spawnPoint = spawnPointGameObject;
                     gameManager.SetPlayerJoined(teamIndex, player.NickName, playerGameobject);
+                    
+                    // set viewID
+                    var _photonView = playerGameobject.GetComponent<PhotonView>();
+                    _photonView.ViewID = playerViewID;
                 }
             }
         }
