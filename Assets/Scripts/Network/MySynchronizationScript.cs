@@ -51,13 +51,8 @@ namespace Network
 
             if (!photonView.IsMine)
             {
-                //Debug.Log($"FixedUpdate:: rot:{networkedPosition}, rb_rot{rb.rotation}, calc:{Quaternion.RotateTowards(rb.rotation, networkedRotation, angle*(1.0f/ PhotonNetwork.SerializationRate))}");
                 rb.position = Vector3.MoveTowards(rb.position, networkedPosition, distance*(1.0f/ PhotonNetwork.SerializationRate));
-                
-                Quaternion newRotation = Quaternion.RotateTowards(rb.rotation, networkedRotation,
-                    angle * (1.0f / PhotonNetwork.SerializationRate));
-                //rb.transform.rotation = newRotation;
-                rb.rotation = newRotation;
+                rb.rotation = Quaternion.RotateTowards(rb.rotation, networkedRotation, angle * (1.0f / PhotonNetwork.SerializationRate));
             }
 
         }
@@ -86,7 +81,6 @@ namespace Network
             {
 
                 //Called on my player gameobject that exists in remote player's game
-
                 networkedPosition = (Vector3)stream.ReceiveNext()+battleArenaGameobject.transform.position;
                 networkedRotation = (Quaternion)stream.ReceiveNext();
 
@@ -121,7 +115,6 @@ namespace Network
                         angle = Quaternion.Angle(rb.rotation, networkedRotation);
                     }
                 }
-                Debug.Log($"OnPhotonSerializeView:: reading: from:{rb.rotation}, netwrk:{networkedRotation}, max:{angle*(1.0f/ PhotonNetwork.SerializationRate)}, res:{rb.rotation}");
             }
         }
 

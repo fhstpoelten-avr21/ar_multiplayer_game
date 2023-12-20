@@ -29042,7 +29042,6 @@ MonoBehaviour:
   playerNameText: {fileID: 6447248386557950654}
   carController: {fileID: 5367698002354160470}
   mobileUI: {fileID: 5907710660690409026}
-  spawnPoint: {fileID: 0}
 --- !u!114 &788912229904753815
 MonoBehaviour:
   m_ObjectHideFlags: 0

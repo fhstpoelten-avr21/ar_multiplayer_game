@@ -273,7 +273,7 @@ namespace Network
                     GameObject spawnPoint = GetSpawnByTeamAndName(team, spawnPositionName);
                     AssignSpawnPoint(team, spawnPoint);
                     PlayerSetup playerSetup = player.GetComponent<PlayerSetup>();
-                    playerSetup.spawnPoint = spawnPoint;
+                    playerSetup.SetSpawnPoint(spawnPoint);
 
                     PhotonView _photonView = player.GetComponent<PhotonView>();
                     _photonView.ViewID = (int)data[2];
@@ -293,10 +293,10 @@ namespace Network
             object playerSelectionNumber;
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(Constants.PLAYER_SELECTION_NUMBER, out playerSelectionNumber))
             {
-                // assign spawnpoint of specific team
+                // get Team of player
                 int team = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
                 
-                // set spawnPointName to properties
+                // get available spawnPoint and set spawnPointName to properties
                 GameObject spawnPoint = AssignSpawnPoint(team);
                 PhotonNetwork.LocalPlayer.CustomProperties["spawnPoint"] = spawnPoint.name;
                 
@@ -313,7 +313,7 @@ namespace Network
 
                 // save spawnPoint
                 PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
-                playerSetup.spawnPoint = spawnPoint;
+                playerSetup.SetSpawnPoint(spawnPoint);
                 gameManager.SetPlayerJoined(team, PhotonNetwork.LocalPlayer.NickName, playerGameobject);
                 
                 PhotonView _photonView = playerGameobject.GetComponent<PhotonView>();
@@ -345,15 +345,12 @@ namespace Network
             {
                 if(player.ActorNumber != PhotonNetwork.LocalPlayer.ActorNumber)
                 {
-                    Debug.Log("Spawning another player with id " + player.ActorNumber);
                     Hashtable props = player.CustomProperties;
 
                     int teamIndex = (int)props["team"];
                     int playerSelectionNumber = (int)props["Player_Selection_Number"];
                     int playerViewID = (int)props["photonViewID"];
                     string spawnPoint = (string)props["spawnPoint"];
-                    
-                    Debug.Log($"$SpawnOtherPlayers:: actor_{player.ActorNumber}, team_{teamIndex}, playerModel_{playerSelectionNumber}, spawnPoint_{spawnPoint}, playerViewID_{playerViewID}");
 
                     // assign spawnpoint + remove from available spawn points list
                     GameObject spawnPointGameObject = GetSpawnByTeamAndName(teamIndex, spawnPoint);
@@ -372,7 +369,7 @@ namespace Network
 
                     // assign spawnpoint
                     PlayerSetup playerSetup = playerGameobject.GetComponent<PlayerSetup>();
-                    playerSetup.spawnPoint = spawnPointGameObject;
+                    playerSetup.SetSpawnPoint(spawnPointGameObject);
                     gameManager.SetPlayerJoined(teamIndex, player.NickName, playerGameobject);
                     
                     // set viewID
@@ -381,6 +378,12 @@ namespace Network
                 }
             }
         }
+
+        private float CalcFieldGroundOffset()
+        {
+            MeshRenderer renderer = gameFieldGameObject.GetComponent<MeshRenderer>();
+            return Mathf.Min(renderer.bounds.size.x, renderer.bounds.size.y, renderer.bounds.size.z);
+        } 
         #endregion
 
         #region Public Methods
