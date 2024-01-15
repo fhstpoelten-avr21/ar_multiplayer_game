@@ -1882,9 +1882,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefabs:
   - {fileID: 8910320841310209502, guid: 1579f589659883849ab7c94ec1fc1d6e, type: 3}
-  - {fileID: 8910320841310209502, guid: 4ca59752e166248b59d17faaab040139, type: 3}
-  - {fileID: 8910320841310209502, guid: 18182bef3d9994a23b6f32b512d2da8c, type: 3}
-  - {fileID: 8910320841310209502, guid: c0f0eeb3ff3654292b3b93038c09ec5c, type: 3}
+  - {fileID: 8910320841310209502, guid: e8619ce82ab454a48b45743f153e73ef, type: 3}
+  - {fileID: 8910320841310209502, guid: 65aa0319b436de643ae6824a6cee9953, type: 3}
+  - {fileID: 8910320841310209502, guid: 18a06e95cb7d343469710b013dbc892a, type: 3}
   - {fileID: 8910320841310209502, guid: 6520c9f7fbce344d593b83d507de5d40, type: 3}
   - {fileID: 8910320841310209502, guid: 39b5b3a3b717b4a5bbeb066b7a1e270e, type: 3}
   battleArenaGameobject: {fileID: 1204463014}
