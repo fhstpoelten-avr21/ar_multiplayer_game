@@ -25,6 +25,7 @@ public class GameManager :MonoBehaviourPunCallbacks
 
     [Space]
     public GameObject uI_GameFieldPlacement;
+    public GameObject uI_Slider;
 
     [Space]
     public GameObject searchForGamesButtonGameobject;
@@ -32,7 +33,7 @@ public class GameManager :MonoBehaviourPunCallbacks
     public GameObject raycastCenter_Image;
 
     // max allowed players to join one session
-    public int maxPlayer = 12;
+    public int maxPlayer = 6;
 
     [Header("Scripts")]
     public GameObject spawnManagerGameObject;
@@ -62,6 +63,7 @@ public class GameManager :MonoBehaviourPunCallbacks
         uI_JoinedRoomInfoGameObject.SetActive(false);
         uI_InformPanelGameobject.SetActive(true);
         uI_GameFieldPlacement.SetActive(true);
+        uI_Slider.SetActive(true);
         uI_TeamInfoPanel.SetActive(false);
 
         // get Team-Panel Text
@@ -159,6 +161,7 @@ public class GameManager :MonoBehaviourPunCallbacks
         raycastCenter_Image.SetActive(false);
         uI_GameFieldPlacement.SetActive(false);
         uI_JoinedRoomInfoGameObject.SetActive(false);
+        uI_Slider.SetActive(false);
 
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
@@ -308,6 +311,7 @@ public class GameManager :MonoBehaviourPunCallbacks
     {
         uI_JoinedRoomInfoGameObject.SetActive(true);
         uI_GameFieldPlacement.SetActive(false);
+        uI_Slider.SetActive(false);
     }
 
     public void UpdateTeamList()

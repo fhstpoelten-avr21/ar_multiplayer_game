@@ -15,7 +15,8 @@ public class Ball : MonoBehaviour
         ball = GetComponent<Rigidbody>();
         render = GetComponent<Renderer>();
         render.sharedMaterial = materials[0];
-        Freeze();
+        //Freeze();
+        ThrowBallUp();
     }
     void Update()
     {

@@ -25,7 +25,6 @@ namespace Network
         // Start is called before the first frame update
         void Start()
         {
-
             if (PhotonNetwork.IsConnected)
             {
                 //Activating only Lobby UI
@@ -47,13 +46,7 @@ namespace Network
                 uI_ConnectionStatusGameobject.SetActive(false);
 
                 uI_LoginGameobject.SetActive(true);
-
             }
-
-
-
-
-
         }
 
         // Update is called once per frame
