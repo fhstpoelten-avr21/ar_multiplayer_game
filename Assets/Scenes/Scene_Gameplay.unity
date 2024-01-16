@@ -3519,6 +3519,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eb61b66c0b47e04aba051601e1c8fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameField: {fileID: 1204463014}
+  XROrigin: {fileID: 1636217225}
+  uI_GameField_Btns: {fileID: 1254438281}
+  uI_GameField_Remove_Btn: {fileID: 567299764}
+  uI_GameField_Set_Btn: {fileID: 106540303}
+  uI_GameField_Done_Btn: {fileID: 2066469515}
 --- !u!4 &733552709
 Transform:
   m_ObjectHideFlags: 0
@@ -7036,7 +7042,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 49723774}
   m_Direction: 1
   m_MinValue: 20
-  m_MaxValue: 50
+  m_MaxValue: 80
   m_WholeNumbers: 0
   m_Value: 20
   m_OnValueChanged:
