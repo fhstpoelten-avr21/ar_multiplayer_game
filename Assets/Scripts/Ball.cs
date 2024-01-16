@@ -22,7 +22,7 @@ public class Ball : MonoBehaviour
         ball = GetComponent<Rigidbody>();
         render = GetComponent<Renderer>();
         render.sharedMaterial = materials[0];
-        //Freeze
+        Unfreeze();
     }
     void Update()
     {
@@ -33,8 +33,7 @@ public class Ball : MonoBehaviour
         if (isGrounded)
         {
             Debug.Log("Ball is grounded");
-            ball.useGravity = false;
-            ball.isKinematic = true;
+            Freeze();
         }
     }
 
