@@ -10,28 +10,31 @@ public class Ball : MonoBehaviour
 
     public float throwForce = 5;
     public Material[] materials;
+    
+    // Speed at which the ball rolls
+    public float rollSpeed = 10f;
+
+    // Whether the ball is currently on the ground
+    private bool isGrounded;
+    
     void Start()
     {
         ball = GetComponent<Rigidbody>();
         render = GetComponent<Renderer>();
         render.sharedMaterial = materials[0];
-        //Freeze();
-        ThrowBallUp();
+        //Freeze
     }
     void Update()
     {
-        //just for testing can be removed
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Check if the ball is on the ground (you might need to adjust the detection method based on your scene)
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
+
+        // Allow the player to control the ball's movement only when it's on the ground
+        if (isGrounded)
         {
-            int index = Array.IndexOf(materials, render.sharedMaterial);
-            if (index == 1)
-            {
-                ChangeColor(0);
-            }
-            else
-            {
-                ChangeColor(1);
-            }
+            Debug.Log("Ball is grounded");
+            ball.useGravity = false;
+            ball.isKinematic = true;
         }
     }
 
