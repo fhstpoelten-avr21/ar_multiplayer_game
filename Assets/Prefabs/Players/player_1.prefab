@@ -7362,8 +7362,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1
+      time: 0.020832062
+      value: 0.5023575
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -7383,11 +7383,11 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxAccelerationForward: 50
-  maxSpeedForward: 40
-  maxAccelerationReverse: 50
-  maxSpeedReverse: 20
-  brakeStrength: 100
-  slopeFriction: 1
+  maxSpeedForward: 50
+  maxAccelerationReverse: 8
+  maxSpeedReverse: 8
+  brakeStrength: 10
+  slopeFriction: 8
   maxSteering: 200
   steeringMultiplierInAir: 0.25
   steeringBySpeed:

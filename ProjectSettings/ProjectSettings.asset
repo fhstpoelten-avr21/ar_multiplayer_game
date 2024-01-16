@@ -168,7 +168,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.fhstp.ARMultiplayerGame
     Standalone: com.fhstp.Car-Kickers-AR
-    iPhone: com.fhstp.AR-Multiplayer-Game
+    iPhone: com.fhstp.Car-Kickers-AR
   buildNumber:
     Standalone: 0
     VisionOS: 0
