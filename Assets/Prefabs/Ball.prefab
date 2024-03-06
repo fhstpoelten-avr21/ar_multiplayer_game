@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4484404723643953232}
   m_Layer: 0
   m_Name: Ball
-  m_TagString: Untagged
+  m_TagString: ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,6 +123,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: f9883a0829706294595ad06d5b59d790, type: 2}
   - {fileID: 2100000, guid: 0dac947c04b195d42bef6ba9543db4b6, type: 2}
+  rollSpeed: 10
 --- !u!54 &4484404723643953232
 Rigidbody:
   m_ObjectHideFlags: 0

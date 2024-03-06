@@ -2,13 +2,13 @@
 In this multiplayer game, 2 against 2 players compete against each other
 by using small cars to shoot the ball into the opponent's goal.
 The soccer field and the other objects are placed in reality. 
-There is also a bomb on the field that you should stay away from.
+There are also bombs on the field that you should stay away from!
 <br>
 * **Genre:** AR Multiplayer Game
 * **Plattform:** Android and IOS
 
 
-<img src="screenshots/demo.png" width="700"/>
+<img src="screenshots/menu.jpg" width="1398" alt="menu"/>
 
 <br>
 <br>
