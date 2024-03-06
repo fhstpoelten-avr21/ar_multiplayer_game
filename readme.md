@@ -1,7 +1,10 @@
-# AR Multiplayer Game
-A simple Augmented Reality Multiplayer game for teams up to 3vs3. 
+# Car Kickers AR
+In this multiplayer game, 2 against 2 players compete against each other
+by using small cars to shoot the ball into the opponent's goal.
+The soccer field and the other objects are placed in reality. 
+There is also a bomb on the field that you should stay away from.
 <br>
-* **Genre:** Multiplayer Party Game
+* **Genre:** AR Multiplayer Game
 * **Plattform:** Android and IOS
 
 
@@ -15,11 +18,11 @@ A simple Augmented Reality Multiplayer game for teams up to 3vs3.
 | Software / Package                | Description / Link                                                                                  |
 | --------------------------        | ------------------------------------------------------------------------------------- |
 | Unity3D 2022.3.11 (LTS)           | https://unity3d.com/get-unity/download/archive                                        |
-| Blender 3.6.5 (LTS)                    | https://www.blender.org/download/                                                     |
 | AR Foundation    | https://unity.com/de/unity/features/arfoundation                                       |
-| Wwise    | https://www.audiokinetic.com/en/products/wwise                                                              |
-| SoundQ   | https://www.prosoundeffects.com/soundq/                                                                |
-| Reaper    | https://www.reaper.fm/download.php     |
+| Asset Forge                   | https://kenney.nl/tools/asset-forge                                                     |
+| Photon Engine    | https://www.photonengine.com/                                       |
+
+
 
 <br>
 <br>
