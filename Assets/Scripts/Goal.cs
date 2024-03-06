@@ -15,11 +15,19 @@ public class Goal : MonoBehaviour
     public int winPoints = 5;
     // Indicates which team this goal belongs to
     public bool isGoal1;
-    
-    
+
+    private Vector3 initialBallPosition; // Store the initial position of the ball
+
     void Start()
     {
         uI_winMsgObj.SetActive(false);
+
+        // Store the initial position of the ball when the game starts
+        GameObject ball = GameObject.FindWithTag("ball");
+        if (ball != null)
+        {
+            initialBallPosition = ball.transform.position;
+        }
     }
 
 
@@ -45,9 +53,8 @@ public class Goal : MonoBehaviour
                 }
                 else
                 {
-                    // Respawn ball
-                    GameObject ball = GameObject.FindWithTag("ball");
-                    // TODO - move ball to coordinates 0,5,0
+                    // Respawn ball to its initial position
+                    ResetBallPosition();
                 }
                 
             }
@@ -67,11 +74,26 @@ public class Goal : MonoBehaviour
                 }
                 else
                 {
-                    // Respawn ball
-                    GameObject ball = GameObject.FindWithTag("ball");
-                    // TODO - move ball to coordinates 0,5,0
+                    // Respawn ball to its initial position
+                    ResetBallPosition();
                 }
             }
+        }
+    }
+
+    // Reset the ball to its initial position
+    private void ResetBallPosition()
+    {
+        GameObject ball = GameObject.FindWithTag("ball");
+        if (ball != null)
+        {
+        ball.transform.position = initialBallPosition;
+        Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
+        if (ballRigidbody != null)
+        {
+            ballRigidbody.velocity = Vector3.zero;
+
+        }
         }
     }
 }
