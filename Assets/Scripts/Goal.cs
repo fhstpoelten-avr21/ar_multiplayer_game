@@ -85,13 +85,17 @@ public class Goal : MonoBehaviour
     private void ResetBallPosition()
     {
         GameObject ball = GameObject.FindWithTag("ball");
+        Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
+
         if (ball != null)
         {
         ball.transform.position = initialBallPosition;
-        Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
+
         if (ballRigidbody != null)
         {
+            Debug.Log("VELOCITY TO ZERO");
             ballRigidbody.velocity = Vector3.zero;
+            ballRigidbody.angularVelocity = Vector3.zero;
 
         }
         }
