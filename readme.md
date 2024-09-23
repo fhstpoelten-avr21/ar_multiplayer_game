@@ -8,7 +8,8 @@ There are also bombs on the field that you should stay away from!
 * **Plattform:** Android and IOS
 
 
-<img src="screenshots/menu.jpg" width="1398" alt="menu"/>
+[<img src="screenshots/menu.jpg" width="1398" alt="menu"/>](https://vimeo.com/1012117783?share=copy)
+
 
 <br>
 <br>
@@ -27,6 +28,7 @@ There are also bombs on the field that you should stay away from!
 
 # Gameplay Video
 Check out the gameplay video of Car Kickers AR on Vimeo:
+<br>
 [![Watch the video](https://img.icons8.com/color/48/000000/video.png)](https://vimeo.com/1012117783?share=copy)
 
 <br>
